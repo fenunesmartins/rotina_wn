@@ -1,0 +1,36 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from time import sleep
+
+url = "http://cockpit.matrix.net.br/d/rfevs1KZk/cockpit?orgId=85&refresh=1m"
+
+#pyinstaller --onefile cockpit.py  #Pra gerar o build
+
+option = Options()
+option.headless = True
+scrap = webdriver.Chrome(options=option)
+scrap.get(url)
+
+scrap.find_element_by_xpath('//*[@id="login-view"]/div/form/div[1]/div[2]/div/div/input').send_keys('webnets')
+scrap.find_element_by_xpath('//*[@id="login-view"]/div/form/div[2]/div[2]/div/div/input').send_keys('_#Cockpit2021@')
+sleep(5)
+scrap.find_element_by_xpath('//*[@id="login-view"]/div/form/button').click()
+sleep(5)
+
+while (True):
+    envios = scrap.find_element_by_xpath('//*[@id="panel-2"]/div/div[1]/div/div[2]/div/plugin-component/panel-plugin-table-old/grafana-panel/ng-transclude/div[1]/div[2]/table/tbody')
+    sleep(2)
+    recebimentos = scrap.find_element_by_xpath('//*[@id="panel-14"]/div/div[1]/div/div[2]/div/plugin-component/panel-plugin-table-old/grafana-panel/ng-transclude/div[1]/div[2]/table/tbody')
+    sleep(2)
+    enviostext = envios.text
+    recebimentostext = recebimentos.text
+
+    print(f'Enviados: {enviostext}')
+    print(f'Recebidos: {recebimentostext}')
+    sleep(50)
+
+    with open('dados.txt', 'w') as arquivo:
+        arquivo.write(f'Enviados:\n {enviostext} ')
+        arquivo.write('****************************')
+        arquivo.write(f'Recebidos:\n {recebimentostext}')
+
