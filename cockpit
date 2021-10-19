@@ -11,25 +11,32 @@ option = Options()
 option.headless = True
 driver = webdriver.Chrome(options=option)
 driver.get(url)
-
+print(f'Iniciando a coleta de dados...')
 driver.find_element(By.XPATH, '//*[@id="login-view"]/div/form/div[1]/div[2]/div/div/input').send_keys('webnets')
 driver.find_element(By.XPATH, '//*[@id="login-view"]/div/form/div[2]/div[2]/div/div/input').send_keys('_#Cockpit2021@')
 driver.find_element(By.XPATH, '//*[@id="login-view"]/div/form/button').click()
-sleep(40)
-
+sleep(20)
+print(f'Obtendo os dados...')
 while (True):
     envios = driver.find_element(By.XPATH, '//*[@id="panel-2"]/div/div[1]/div/div[2]/div/plugin-component/panel-plugin-table-old/grafana-panel/ng-transclude/div[1]/div[2]/table/tbody')
     sleep(10)
     recebimentos = driver.find_element(By.XPATH, '//*[@id="panel-14"]/div/div[1]/div/div[2]/div/plugin-component/panel-plugin-table-old/grafana-panel/ng-transclude/div[1]/div[2]/table/tbody')
     sleep(10)
+
     enviostext = envios.text
     recebimentostext = recebimentos.text
+
+    sleep(5)
 
     print(f'Enviados: {enviostext}')
     print(f'Recebidos: {recebimentostext}')
 
+    sleep(5)
+    print(f'Salvando os dados coletados...')
     with open('dados.txt', 'w') as arquivo:
         arquivo.write(f'Enviados:\n {enviostext} ')
         arquivo.write('****************************')
         arquivo.write(f'Recebidos:\n {recebimentostext}')
-        sleep(300)
+    print(f'Dados salvos com sucesso...')
+    sleep(5)
+    print(f'Iniciando o script novamente...')
